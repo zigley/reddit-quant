@@ -1,0 +1,119 @@
+kind: family
+family_id: futures.sma_cross
+version: v1
+template: sma_cross
+rules: Long on a fresh cross of SMA(fast_n) above SMA(slow_n). Exit when fast < slow
+  or on a close below entry - 3 ATR(14). Next-open fills.
+grid:
+  fast_n:
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
+  slow_n:
+  - 100
+  - 150
+  - 200
+  - 250
+  - 300
+fixed_params:
+  stop_atr: 3.0
+textbook_default_baseline:
+  fast_n: 30
+  slow_n: 200
+n_configs: 25
+universe:
+- ES=F
+- NQ=F
+- GC=F
+- ZN=F
+timeframe: 1d
+risk_limits:
+  max_drawdown: 0.25
+  max_gross_leverage: 1.0
+  max_risk_per_position: 0.02
+  max_position_concentration: 0.25
+  max_concurrent_positions: 5
+  shorts: disabled
+  derivatives: disabled
+costs:
+  commission_perc: 0.0001
+  slippage_perc: 0.0005
+  stress_multipliers:
+  - 2
+  - 3
+execution:
+  fill: next_bar_open
+  cheat_on_open: false
+splits:
+  train:
+  - '2005-01-01'
+  - '2016-12-31'
+  validation:
+  - '2017-01-01'
+  - '2020-12-31'
+  final_test:
+  - '2021-01-01'
+  - '2026-11-09'
+selection_rule: 'Within a family, the config with the highest TRAIN net Sharpe (base
+  costs) among the trial grid is selected. Validation and final test are never used
+  to select.
+
+  '
+market_id: futures
+primary_benchmark: ES=F
+trading_days: 252
+source_ideas:
+- idea_id: RQ-cmoekh
+  url: https://www.reddit.com/r/algotrading/comments/cmoekh/simple_ma_crossover_strategy/
+  published: '2019-08-06'
+  author_params_as_extracted:
+    ma_lengths:
+    - 200
+- idea_id: RQ-wna4h1
+  url: https://www.reddit.com/r/algotrading/comments/wna4h1/feedback_on_my_etf_strategy/
+  published: '2022-08-13'
+  author_params_as_extracted:
+    ma_lengths:
+    - 500
+- idea_id: RQ-dh0qov
+  url: https://www.reddit.com/r/algotrading/comments/dh0qov/simple_moving_average_trading_algorithm_in_r/
+  published: '2019-10-12'
+  author_params_as_extracted: {}
+- idea_id: RQ-dhs4xj
+  url: https://www.reddit.com/r/algotrading/comments/dhs4xj/what_does_your_algotrading_workflow_look_like/
+  published: '2019-10-14'
+  author_params_as_extracted: {}
+- idea_id: RQ-1u437da
+  url: https://www.reddit.com/r/algotrading/comments/1u437da/1327_buythedip_algorithm_something_hit_me_this/
+  published: '2026-06-12'
+  author_params_as_extracted:
+    ma_lengths:
+    - 20
+    - 200
+- idea_id: RQ-1h37hcn
+  url: https://www.reddit.com/r/algotrading/comments/1h37hcn/how_do_you_choose_instruments_to_trendfollow/
+  published: '2024-11-30'
+  author_params_as_extracted: {}
+- idea_id: RQ-1hdlp0o
+  url: https://www.reddit.com/r/algotrading/comments/1hdlp0o/backtestingpy_is_doing_a_lot_but_not_backtesting/
+  published: '2024-12-13'
+  author_params_as_extracted: {}
+- idea_id: RQ-15lqxoc
+  url: https://www.reddit.com/r/Daytrading/comments/15lqxoc/a_meanreversion_strategy_for_arkk_etf/
+  published: '2023-08-08'
+  author_params_as_extracted: {}
+- idea_id: RQ-p1cswj
+  url: https://www.reddit.com/r/algotrading/comments/p1cswj/principal_components_of_signal_space/
+  published: '2021-08-09'
+  author_params_as_extracted: {}
+- idea_id: RQ-zmvkz0
+  url: https://www.reddit.com/r/algotrading/comments/zmvkz0/working_on_a_new_backtester/
+  published: '2022-12-15'
+  author_params_as_extracted: {}
+config_version: 2
+gates_hash: dc47726303822fba758cf2d02327db214dbae265046690370523d0ec37527ed2
+data_manifest_hash: e70e84048d143b2e24710aa8f7748f63916e1f106ba9ccb36f295700018f8517
+labels: retrospective, PROVISIONAL config
+spec_hash: 52a9236bdb1e1a29771cad1c499ba71834201819fbf64f4999b2f3a3ae134035

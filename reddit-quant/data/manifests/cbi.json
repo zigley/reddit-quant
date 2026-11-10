@@ -1,0 +1,109 @@
+{
+  "source": "yfinance",
+  "yfinance_version": "1.8.0",
+  "adjust": "auto_adjust=True",
+  "market_id": "cbi",
+  "retrieved_at": "2026-11-10T03:25:17-0700",
+  "requested_start": "2007-04-11",
+  "requested_end_inclusive": "2026-11-09",
+  "note": "Adjusted prices can change retroactively when new dividends or splits occur. Re-downloading later may give different checksums; compare to this manifest.",
+  "alignment": {
+    "method": "intersection",
+    "common_bars": 4928,
+    "first": "2007-04-11",
+    "last": "2026-11-09",
+    "dropped_vs_own_calendar": {
+      "GLD": 0,
+      "SLV": 0,
+      "USO": 0,
+      "DBC": 0,
+      "TLT": 0,
+      "IEF": 0,
+      "HYG": 0,
+      "EFA": 0,
+      "EEM": 0,
+      "VNQ": 0,
+      "UUP": 0
+    }
+  },
+  "files": {
+    "GLD": {
+      "path": "data/prices/GLD.csv",
+      "sha256": "e793ac3ee97eb58dbbbb06b614b090ae2e83b75c2f5b58c58ce67d034117ff82",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "SLV": {
+      "path": "data/prices/SLV.csv",
+      "sha256": "906f573b696da8bd79eb7934fec89237ff861dcc0a77a42e4021399a8b72a123",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "USO": {
+      "path": "data/prices/USO.csv",
+      "sha256": "1604c20a3f86e52fa563682f802f88d53c3eedbd4009efc9a260d399173c1319",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "DBC": {
+      "path": "data/prices/DBC.csv",
+      "sha256": "df87b95c941b6e57c5a7290a59f298addc55e89b35610cdc93fccdb35c392907",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "TLT": {
+      "path": "data/prices/TLT.csv",
+      "sha256": "145b0c82c0d46278f1b07d27b8fb7f3d84872990d00e52b81c407879d0a59af0",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "IEF": {
+      "path": "data/prices/IEF.csv",
+      "sha256": "64f942ec61da12aecd769619883a3f39a87fa8f7732fb59f09cf1af506939301",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "HYG": {
+      "path": "data/prices/HYG.csv",
+      "sha256": "8f2e74ddfb4923d69a67ccb3cc2718655a7112bea9b74e9354d5df9f56859314",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "EFA": {
+      "path": "data/prices/EFA.csv",
+      "sha256": "2a2063457c9d2c220e86dc3c4f0a1c0fc23012fb0b5cfe714bff327ac9171e8f",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "EEM": {
+      "path": "data/prices/EEM.csv",
+      "sha256": "2b89cccb70593dc1f58daa54a4ffc9df2701cf394502d6e7309d465d7d4745f3",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "VNQ": {
+      "path": "data/prices/VNQ.csv",
+      "sha256": "60b29e837510cc9e3eed10c8299f7ab37f897cd50f302e74772e7812e854173d",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    },
+    "UUP": {
+      "path": "data/prices/UUP.csv",
+      "sha256": "ac334de660f39dd930c0acc5bf7bc88f3107e1ebebc42ba590d6758d4d31cee0",
+      "rows": 4928,
+      "first": "2007-04-11",
+      "last": "2026-11-09"
+    }
+  },
+  "manifest_hash": "e5b0d99dbecac79512cb7e381691da20050f225410c92851389ce83360ca90ad"
+}

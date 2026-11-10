@@ -1,0 +1,123 @@
+kind: family
+family_id: futures.bollinger_meanrev
+version: v1
+template: bollinger_meanrev
+rules: Long when close < lower Bollinger band(bb_n, bb_std) and close > SMA(200).
+  Exit when close > middle band, after max_hold=10 bars, or on a close below entry
+  - 3 ATR(14).
+grid:
+  bb_n:
+  - 10
+  - 15
+  - 20
+  - 25
+  - 30
+  bb_std:
+  - 1.5
+  - 2.0
+  - 2.5
+  - 3.0
+  - 3.5
+fixed_params:
+  trend_n: 200
+  max_hold: 10
+  stop_atr: 3.0
+textbook_default_baseline:
+  bb_n: 20
+  bb_std: 2.5
+n_configs: 25
+universe:
+- ES=F
+- NQ=F
+- GC=F
+- ZN=F
+timeframe: 1d
+risk_limits:
+  max_drawdown: 0.25
+  max_gross_leverage: 1.0
+  max_risk_per_position: 0.02
+  max_position_concentration: 0.25
+  max_concurrent_positions: 5
+  shorts: disabled
+  derivatives: disabled
+costs:
+  commission_perc: 0.0001
+  slippage_perc: 0.0005
+  stress_multipliers:
+  - 2
+  - 3
+execution:
+  fill: next_bar_open
+  cheat_on_open: false
+splits:
+  train:
+  - '2005-01-01'
+  - '2016-12-31'
+  validation:
+  - '2017-01-01'
+  - '2020-12-31'
+  final_test:
+  - '2021-01-01'
+  - '2026-11-09'
+selection_rule: 'Within a family, the config with the highest TRAIN net Sharpe (base
+  costs) among the trial grid is selected. Validation and final test are never used
+  to select.
+
+  '
+market_id: futures
+primary_benchmark: ES=F
+trading_days: 252
+source_ideas:
+- idea_id: RQ-mcvqq1
+  url: https://www.reddit.com/r/Daytrading/comments/mcvqq1/mean_reversion_vs_trending_market_behavior/
+  published: '2021-03-25'
+  author_params_as_extracted:
+    ma_lengths:
+    - 20
+- idea_id: RQ-1h74yhu
+  url: https://www.reddit.com/r/Daytrading/comments/1h74yhu/late_entry_but_clean_trade_overall/
+  published: '2024-12-05'
+  author_params_as_extracted:
+    ma_lengths:
+    - 50
+- idea_id: RQ-ye5fa3
+  url: https://www.reddit.com/r/algotrading/comments/ye5fa3/day_trading_algos_how_to_set_the_perfect_trailing/
+  published: '2022-10-26'
+  author_params_as_extracted:
+    bb_std: 5.0
+- idea_id: RQ-w5nxop
+  url: https://www.reddit.com/r/algotrading/comments/w5nxop/i_finally_figured_out_strategy_that_outperforms/
+  published: '2022-07-22'
+  author_params_as_extracted: {}
+- idea_id: RQ-1fmw49p
+  url: https://www.reddit.com/r/algotrading/comments/1fmw49p/statistical_significance_of_optimized_strategies/
+  published: '2024-09-22'
+  author_params_as_extracted: {}
+- idea_id: RQ-ujtugo
+  url: https://www.reddit.com/r/algotrading/comments/ujtugo/need_help_please/
+  published: '2022-05-06'
+  author_params_as_extracted:
+    bb_std: 4.0
+- idea_id: RQ-124qr7p
+  url: https://www.reddit.com/r/Daytrading/comments/124qr7p/understanding_mean_reversion_trading_a_simple/
+  published: '2023-03-28'
+  author_params_as_extracted: {}
+- idea_id: RQ-fobv2q
+  url: https://www.reddit.com/r/Daytrading/comments/fobv2q/how_to_make_the_most_of_a_probably_perfect_day/
+  published: '2020-03-24'
+  author_params_as_extracted: {}
+- idea_id: RQ-clhz7t
+  url: https://www.reddit.com/r/algotrading/comments/clhz7t/volatility_indicators_for_trendfollowing_and/
+  published: '2019-08-03'
+  author_params_as_extracted: {}
+- idea_id: RQ-1vyp65b
+  url: https://www.reddit.com/r/Daytrading/comments/1vyp65b/the_reason_a_lot_of_people_are_failing/
+  published: '2026-08-26'
+  author_params_as_extracted:
+    ma_lengths:
+    - 200
+config_version: 2
+gates_hash: dc47726303822fba758cf2d02327db214dbae265046690370523d0ec37527ed2
+data_manifest_hash: e70e84048d143b2e24710aa8f7748f63916e1f106ba9ccb36f295700018f8517
+labels: retrospective, PROVISIONAL config
+spec_hash: 479bc7b84530d913d38f4884aafb8c128a7ccd62463512400f0ff860786e2c09

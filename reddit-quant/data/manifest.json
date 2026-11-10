@@ -1,0 +1,103 @@
+{
+  "source": "yfinance",
+  "yfinance_version": "1.8.0",
+  "adjust": "auto_adjust=True",
+  "retrieved_at": "2026-11-09T23:43:20-0700",
+  "requested_start": "2005-01-01",
+  "requested_end_inclusive": "2026-11-09",
+  "note": "Adjusted prices can change retroactively when new dividends or splits occur. Re-downloading later may give different checksums; compare to this manifest.",
+  "files": {
+    "SPY": {
+      "path": "data/prices/SPY.csv",
+      "sha256": "523f80f04890a9bc6fb607951e4d736306c0340ea7d3863e0f0c447ce33b430d",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "QQQ": {
+      "path": "data/prices/QQQ.csv",
+      "sha256": "55bc8ce9cfac7aed0a4a104a3788fdb3a5209bfce8fd9bca8052145b942ed28b",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "IWM": {
+      "path": "data/prices/IWM.csv",
+      "sha256": "1cfe2a9fdfbc3d5fd358cb99bf22e50f0dcb8dfe68fa7be853853788bc228cfa",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "DIA": {
+      "path": "data/prices/DIA.csv",
+      "sha256": "c4487a44d53555e66a2d755699f73c8c1622cbf5d561d5ceab8fbe63523066a1",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLK": {
+      "path": "data/prices/XLK.csv",
+      "sha256": "4713d610527397a7ab885708113aa52167954737756f98f04524b7182d44d5fd",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLF": {
+      "path": "data/prices/XLF.csv",
+      "sha256": "457ddbd722d4634d8f1f8f9f1ec6d5369c3d445fa351f2d6e0a05e02bccb9bfd",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLE": {
+      "path": "data/prices/XLE.csv",
+      "sha256": "573d7664ff7da23239f23875903d1a7c9dfef153293b63bf686511ce512c446f",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLV": {
+      "path": "data/prices/XLV.csv",
+      "sha256": "7e0a9b3ac59d76f3d1f539a04e572849cf5d8a51e088b5aaf0638c300969e820",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLY": {
+      "path": "data/prices/XLY.csv",
+      "sha256": "ded43938b22543503f0d257024cb7f18f30865f38cc8a8f726882325be0e5c51",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLP": {
+      "path": "data/prices/XLP.csv",
+      "sha256": "a1bac9120cb1a2ab17324a3af9c86da2d40a487961c48ecea72affbb883f1284",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLI": {
+      "path": "data/prices/XLI.csv",
+      "sha256": "10f56ecd84a064e3067760c0cd0cf7956bdd440d1ba1ce0601e89eafee84921f",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLU": {
+      "path": "data/prices/XLU.csv",
+      "sha256": "79e00b2026a26263d5051e23cc0daf3466d64317ae7c17c07f525dca5c7a3747",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    },
+    "XLB": {
+      "path": "data/prices/XLB.csv",
+      "sha256": "72f362858d47952cc6c3cd414523bc97e9ea9d7295c89ad1de9f0fce585eb7e5",
+      "rows": 5498,
+      "first": "2005-01-03",
+      "last": "2026-11-09"
+    }
+  },
+  "manifest_hash": "ff457a7962536907ed11ef41d2b2fe4361c29a2bb0b67a780d87169c58bc6528"
+}

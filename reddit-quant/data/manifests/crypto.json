@@ -1,0 +1,85 @@
+{
+  "source": "yfinance",
+  "yfinance_version": "1.8.0",
+  "adjust": "auto_adjust=True",
+  "market_id": "crypto",
+  "retrieved_at": "2026-11-10T03:25:15-0700",
+  "requested_start": "2017-11-09",
+  "requested_end_inclusive": "2026-11-09",
+  "note": "Adjusted prices can change retroactively when new dividends or splits occur. Re-downloading later may give different checksums; compare to this manifest.",
+  "alignment": {
+    "method": "intersection",
+    "common_bars": 3288,
+    "first": "2017-11-09",
+    "last": "2026-11-09",
+    "dropped_vs_own_calendar": {
+      "BTC-USD": 0,
+      "ETH-USD": 0,
+      "LTC-USD": 0,
+      "XRP-USD": 0,
+      "BNB-USD": 0,
+      "ADA-USD": 0,
+      "DOGE-USD": 0,
+      "LINK-USD": 0
+    }
+  },
+  "files": {
+    "BTC-USD": {
+      "path": "data/prices/BTC-USD.csv",
+      "sha256": "775f4b07c4574932106ae7b1def012e3e6387b999eb4eedede9d8bc1bb8c4aef",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "ETH-USD": {
+      "path": "data/prices/ETH-USD.csv",
+      "sha256": "7a31603dbf96c92df301d12a53a38540037b9e43071061d02f40c256d485d81c",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "LTC-USD": {
+      "path": "data/prices/LTC-USD.csv",
+      "sha256": "4c5003e759b166c1045724edb0db98fcf774c741f8e687290c154f5b19796084",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "XRP-USD": {
+      "path": "data/prices/XRP-USD.csv",
+      "sha256": "d94df4d3be0200ccfd8052f53fa8003775c225c71cf833ad32532f4c71abb305",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "BNB-USD": {
+      "path": "data/prices/BNB-USD.csv",
+      "sha256": "a3344c47d4b1fc6e0f1f3f90bf507f4f7e22b4179bb4378da49b66a609cfd711",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "ADA-USD": {
+      "path": "data/prices/ADA-USD.csv",
+      "sha256": "e2ed9d1c12d872209a69262c74d91ae49b554009ce3b9175e56220676c9a2223",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "DOGE-USD": {
+      "path": "data/prices/DOGE-USD.csv",
+      "sha256": "024ed991a56c2ad3cd63146f49c8112e43d716e94b82492cb165cd41cf7087d1",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    },
+    "LINK-USD": {
+      "path": "data/prices/LINK-USD.csv",
+      "sha256": "58b7199085301abe14cfc8935bcda199c3b7661dc7664909e2e58ebbe017f566",
+      "rows": 3288,
+      "first": "2017-11-09",
+      "last": "2026-11-09"
+    }
+  },
+  "manifest_hash": "b2459dad8228a9ddecaf5e40544fad19846ae96e94b214729acde40e0fbb5e96"
+}

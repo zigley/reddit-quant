@@ -1,0 +1,275 @@
+# reddit-quant v1 configuration
+# EVERY VALUE BELOW IS PROVISIONAL pending confirmation from the operator.
+# Nothing tested under this config counts as validated.
+# Gates and splits in this file are PRE-REGISTERED: they are committed to git
+# before any trial runs. Changing them after results are seen is not allowed;
+# a change requires a new config_version and a restarted evaluation.
+
+# config_version 2 adds a markets block for cycle 2. Gate THRESHOLDS are unchanged
+# (DSR >= 0.95, PBO <= 0.50, cost, delay, drawdown and minimum-trade rules).
+# D10 and F5 compare against each market's pre-registered primary benchmark
+# (and equal-weight of that universe for D10) instead of a hard-coded SPY ticker.
+# That comparison is registered in this file before any cycle-2 trial.
+# The top-level universe, splits, costs and gates text below are the cycle-1
+# US ETF defaults and are left in place.
+config_version: 2
+status: PROVISIONAL
+
+research_mode: autonomous research and paper trading only
+live_trading: false            # PROVISIONAL, and the code refuses to run if this is true
+market: US ETFs                # PROVISIONAL
+universe:                      # PROVISIONAL (fixed list, no survivorship issue for these)
+  - SPY
+  - QQQ
+  - IWM
+  - DIA
+  - XLK
+  - XLF
+  - XLE
+  - XLV
+  - XLY
+  - XLP
+  - XLI
+  - XLU
+  - XLB
+timeframe: 1d                  # PROVISIONAL
+initial_capital: 10000         # PROVISIONAL, USD, paper
+broker_or_exchange: Alpaca paper (adapter stub only, disabled)   # PROVISIONAL
+data:                          # PROVISIONAL
+  source: yfinance
+  adjust: auto_adjust_true     # split and dividend adjusted; adjusted history can change retroactively
+  start: "2005-01-01"
+  end: "2026-11-09"            # last completed session at time of cycle 1
+backtest_engine: backtrader    # PROVISIONAL
+storage:                       # PROVISIONAL
+  sqlite: ledger/ledger.sqlite
+  artifacts: artifacts/
+benchmarks:                    # PROVISIONAL
+  - SPY buy-and-hold
+  - equal-weight universe (daily rebalanced, zero cost)
+  - same-family baseline (textbook default config of the family, grid centre)
+
+risk_limits:                   # PROVISIONAL
+  max_drawdown: 0.25
+  max_gross_leverage: 1.0
+  max_risk_per_position: 0.02  # of equity, measured to a 3 ATR(14) close-based stop (interpretation, see README)
+  max_position_concentration: 0.25
+  max_concurrent_positions: 5
+  shorts: disabled
+  derivatives: disabled
+
+research_budget:               # PROVISIONAL
+  max_families_per_cycle: 3
+  max_trials_per_family: 25
+  cycle_frequency: weekly
+  max_wall_time_minutes_per_cycle: 120
+
+costs:                         # PROVISIONAL
+  commission_perc: 0.0001      # 1 bp per side
+  slippage_perc: 0.0005        # 5 bps per side
+  stress_multipliers: [2, 3]
+execution:
+  fill: next_bar_open          # signals at close of bar t, fills at open of bar t+1
+  cheat_on_open: false
+
+splits:                        # PROVISIONAL, retrospective (all history is already known)
+  train: ["2005-01-01", "2016-12-31"]
+  validation: ["2017-01-01", "2020-12-31"]
+  final_test: ["2021-01-01", "2026-11-09"]   # evaluated once per frozen spec
+
+selection_rule: >
+  Within a family, the config with the highest TRAIN net Sharpe (base costs) among the
+  trial grid is selected. Validation and final test are never used to select.
+
+metrics:
+  sharpe_rf: 0.0               # risk-free rate assumed zero, disclosed
+  trading_days: 252
+
+overfitting:
+  n_trials_per_family: 25
+  dsr_conservative_n: 75       # also report DSR with all 3 families pooled
+  pbo_partitions: 16
+  bootstrap:
+    method: stationary
+    mean_block_len: 10
+    n_resamples: 2000
+    seed: 20261109
+    ci: 0.95
+  top_trades_removed: 5
+  delay_bars: 1
+
+# PRE-REGISTERED GATES. A candidate failing any DEV gate is REJECTED with reason and is
+# never run on the final test. A candidate failing any FINAL gate is REJECTED.
+gates:
+  dev:
+    D1_val_sharpe_positive: "validation net Sharpe (base costs) > 0"
+    D2_dsr: "Deflated Sharpe Ratio probability >= 0.95 on train+validation, N = 25 trials"
+    D3_pbo: "PBO (CSCV, 16 partitions) <= 0.50 over the 25-config grid, train+validation"
+    D4_bootstrap_ci: "95% stationary-bootstrap CI lower bound of annualised Sharpe > 0 on train+validation"
+    D5_max_dd: "max drawdown <= 0.25 on train and on validation, base costs"
+    D6_cost_2x: "validation Sharpe at 2x costs > 0"
+    D7_delay: "validation Sharpe with 1-bar extra delay > 0"
+    D8_top_trades: "train+validation net PnL > 0 after removing the 5 largest winning trades"
+    D9_neighbours: "median train Sharpe of adjacent grid configs >= 0.5 x selected train Sharpe, and > 0"
+    D10_beats_passive: "validation Sharpe > SPY buy-and-hold and > equal-weight universe buy-and-hold validation Sharpe"
+  final:
+    F1_sharpe: "final-test net Sharpe >= 0.3"
+    F2_max_dd: "final-test max drawdown <= 0.25"
+    F3_cost_2x: "final-test Sharpe at 2x costs > 0"
+    F4_delay: "final-test Sharpe with 1-bar delay > 0"
+    F5_beats_spy: "final-test Sharpe > SPY buy-and-hold final-test Sharpe"
+    F6_min_trades: "final-test trades >= 20"
+
+reddit:
+  subreddits: [algotrading, Daytrading]
+  user_agent: "reddit-quant-research/0.1 (read-only research script)"
+  rate_limit_seconds: 2.0
+  method_order: [praw, public_json, arctic_shift]
+  min_score: 3
+  min_selftext_chars: 300
+  max_posts_for_comments: 60
+  keywords: [RSI, "mean reversion", "moving average", breakout, momentum, "Bollinger", IBS, "backtest", "sector rotation", "trend following"]
+  year_from: 2019
+  year_to: 2026
+
+# ---------------------------------------------------------------------------
+# Cycle 2 markets. Each market is its own research universe: its own trial
+# counter, DSR N=25 per family, pooled DSR N=75, splits, costs and benchmark.
+# Families were ranked from cached Reddit ideas with the same score formula as
+# cycle 1 (best testability + 0.02 * log(1+n_unique)), then frozen here before
+# any cycle-2 trial. The runner refuses to run if a fresh ranking disagrees.
+# ---------------------------------------------------------------------------
+markets:
+  crypto:
+    market: crypto (BTC, ETH and liquid large caps, 7-day daily bars)
+    universe:
+      - BTC-USD
+      - ETH-USD
+      - LTC-USD
+      - XRP-USD
+      - BNB-USD
+      - ADA-USD
+      - DOGE-USD
+      - LINK-USD
+    primary_benchmark: BTC-USD
+    align_calendars: true
+    timeframe: 1d
+    data:
+      source: yfinance
+      adjust: auto_adjust_true
+      start: "2017-11-09"    # first common date for ETH and the large caps; BTC has earlier history on disk
+      end: "2026-11-09"
+    costs:
+      commission_perc: 0.0010   # 10 bps per side (pre-registered, higher than equity ETFs)
+      slippage_perc: 0.0010     # 10 bps per side
+      stress_multipliers: [2, 3]
+    metrics:
+      sharpe_rf: 0.0
+      trading_days: 365         # 7-day crypto calendar
+    splits:
+      # 300-day SMA warmup from 2017-11-09 lands around 2018-09-05, so train starts 2018-09-01.
+      train: ["2018-09-01", "2021-12-31"]
+      validation: ["2022-01-01", "2023-12-31"]
+      final_test: ["2024-01-01", "2026-11-09"]
+    benchmarks:
+      - BTC-USD buy-and-hold
+      - equal-weight universe (daily rebalanced, zero cost)
+      - same-family baseline (textbook default config of the family, grid centre)
+    families:
+      - rsi_meanrev
+      - xs_momentum
+      - sma_cross
+    idea_match:
+      claimed_markets: [crypto]
+      text_regex: "\\bbtc\\b|bitcoin|\\beth\\b|ethereum|crypto|altcoin|btc-usd"
+
+  cbi:
+    market: commodity, bond and international ETFs
+    universe:
+      - GLD
+      - SLV
+      - USO
+      - DBC
+      - TLT
+      - IEF
+      - HYG
+      - EFA
+      - EEM
+      - VNQ
+      - UUP
+    primary_benchmark: EFA
+    align_calendars: true
+    timeframe: 1d
+    data:
+      source: yfinance
+      adjust: auto_adjust_true
+      start: "2007-04-11"    # HYG listing date; first common date for this universe
+      end: "2026-11-09"
+    costs:
+      commission_perc: 0.0001
+      slippage_perc: 0.0005
+      stress_multipliers: [2, 3]
+    metrics:
+      sharpe_rf: 0.0
+      trading_days: 252
+    splits:
+      # 300 trading days of warmup from 2007-04-11 lands mid-June 2008, so train starts 2008-07-01.
+      train: ["2008-07-01", "2016-12-31"]
+      validation: ["2017-01-01", "2020-12-31"]
+      final_test: ["2021-01-01", "2026-11-09"]
+    benchmarks:
+      - EFA buy-and-hold
+      - equal-weight universe (daily rebalanced, zero cost)
+      - same-family baseline (textbook default config of the family, grid centre)
+    families:
+      - sma_cross
+      - xs_momentum
+      - rsi_meanrev
+    idea_match:
+      claimed_markets: []
+      text_regex: "\\bgld\\b|\\bslv\\b|\\btlt\\b|\\bief\\b|\\bhyg\\b|\\buso\\b|\\bdbc\\b|\\befa\\b|\\beem\\b|\\bvnq\\b|\\buup\\b|commodit|treasury bond|gold etf|silver etf|oil etf|\\bbond etf|international etf|\\breit\\b"
+
+  futures:
+    market: continuous futures via yfinance (roll artifacts are a known caveat)
+    # CL=F is excluded: the yfinance continuous series has two non-positive price bars
+    # on 2020-04-20 and 2020-04-21 (WTI settled negative). This engine sizes and fills
+    # with positive prices, so CL=F is not usable here. The raw CL=F.csv is kept on disk
+    # for the record but is not in the universe. This decision is pre-registered before
+    # any futures trial. Remaining contracts still have roll artifacts, occasional
+    # settlement closes outside the session high/low, and (for GC=F) many zero-volume bars.
+    universe:
+      - ES=F
+      - NQ=F
+      - GC=F
+      - ZN=F
+    primary_benchmark: ES=F
+    align_calendars: true
+    timeframe: 1d
+    data:
+      source: yfinance
+      adjust: auto_adjust_true
+      start: "2000-09-21"    # first ZN=F bar; earlier warmup for 2005 train start
+      end: "2026-11-09"
+    costs:
+      # Same 1 bp + 5 bps equity proxy. These are not exchange fees, and contract rolls are not modelled.
+      commission_perc: 0.0001
+      slippage_perc: 0.0005
+      stress_multipliers: [2, 3]
+    metrics:
+      sharpe_rf: 0.0
+      trading_days: 252
+    splits:
+      train: ["2005-01-01", "2016-12-31"]
+      validation: ["2017-01-01", "2020-12-31"]
+      final_test: ["2021-01-01", "2026-11-09"]
+    benchmarks:
+      - ES=F buy-and-hold (continuous contract)
+      - equal-weight universe (daily rebalanced, zero cost)
+      - same-family baseline (textbook default config of the family, grid centre)
+    families:
+      - sma_cross
+      - bollinger_meanrev
+      - rsi_meanrev
+    idea_match:
+      claimed_markets: [futures]
+      text_regex: "\\bfutures?\\b|e-mini|\\bmes\\b|\\bmnq\\b|crude oil future|gold future|treasury future|es=f|nq=f|cl=f|gc=f|zn=f"

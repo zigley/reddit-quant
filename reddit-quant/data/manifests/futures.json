@@ -1,0 +1,53 @@
+{
+  "source": "yfinance",
+  "yfinance_version": "1.8.0",
+  "adjust": "auto_adjust=True",
+  "market_id": "futures",
+  "retrieved_at": "2026-11-10T03:25:47-0700",
+  "requested_start": "2000-09-21",
+  "requested_end_inclusive": "2026-11-09",
+  "note": "Adjusted prices can change retroactively when new dividends or splits occur. Re-downloading later may give different checksums; compare to this manifest.",
+  "alignment": {
+    "method": "intersection",
+    "common_bars": 6540,
+    "first": "2000-09-21",
+    "last": "2026-11-09",
+    "dropped_vs_own_calendar": {
+      "ES=F": 58,
+      "NQ=F": 58,
+      "GC=F": 19,
+      "ZN=F": 23
+    }
+  },
+  "files": {
+    "ES=F": {
+      "path": "data/prices/ES=F.csv",
+      "sha256": "78d773476b02908f61e090a114252a17a16c95e98fb2cbba9b2612fb2b9ebe20",
+      "rows": 6598,
+      "first": "2000-09-21",
+      "last": "2026-11-09"
+    },
+    "NQ=F": {
+      "path": "data/prices/NQ=F.csv",
+      "sha256": "b17be34dbe9897914e59522b9e69fd118e5417249aa3f954534bb3e228d0504b",
+      "rows": 6598,
+      "first": "2000-09-21",
+      "last": "2026-11-09"
+    },
+    "GC=F": {
+      "path": "data/prices/GC=F.csv",
+      "sha256": "ce76d9f1166961ea1b794b5253d2236d7b7ac1700ed81bccfd51d32ffd3ee5d5",
+      "rows": 6559,
+      "first": "2000-09-21",
+      "last": "2026-11-09"
+    },
+    "ZN=F": {
+      "path": "data/prices/ZN=F.csv",
+      "sha256": "a45ca7a519771001e48a434c8f0187154dfa29968e46942d6e2788afa91a4e8a",
+      "rows": 6563,
+      "first": "2000-09-21",
+      "last": "2026-11-09"
+    }
+  },
+  "manifest_hash": "e70e84048d143b2e24710aa8f7748f63916e1f106ba9ccb36f295700018f8517"
+}

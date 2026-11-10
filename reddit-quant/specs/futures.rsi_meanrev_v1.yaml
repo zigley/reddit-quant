@@ -1,0 +1,122 @@
+kind: family
+family_id: futures.rsi_meanrev
+version: v1
+template: rsi_meanrev
+rules: Long when RSI(rsi_n) < rsi_entry and close > SMA(trend_n=200). Exit when RSI
+  > rsi_exit=60, after max_hold=10 bars, or on a close below entry - 3 ATR(14). Fills
+  at next open.
+grid:
+  rsi_n:
+  - 2
+  - 3
+  - 4
+  - 5
+  - 7
+  rsi_entry:
+  - 5
+  - 10
+  - 15
+  - 20
+  - 25
+fixed_params:
+  trend_n: 200
+  rsi_exit: 60
+  max_hold: 10
+  stop_atr: 3.0
+textbook_default_baseline:
+  rsi_n: 4
+  rsi_entry: 15
+n_configs: 25
+universe:
+- ES=F
+- NQ=F
+- GC=F
+- ZN=F
+timeframe: 1d
+risk_limits:
+  max_drawdown: 0.25
+  max_gross_leverage: 1.0
+  max_risk_per_position: 0.02
+  max_position_concentration: 0.25
+  max_concurrent_positions: 5
+  shorts: disabled
+  derivatives: disabled
+costs:
+  commission_perc: 0.0001
+  slippage_perc: 0.0005
+  stress_multipliers:
+  - 2
+  - 3
+execution:
+  fill: next_bar_open
+  cheat_on_open: false
+splits:
+  train:
+  - '2005-01-01'
+  - '2016-12-31'
+  validation:
+  - '2017-01-01'
+  - '2020-12-31'
+  final_test:
+  - '2021-01-01'
+  - '2026-11-09'
+selection_rule: 'Within a family, the config with the highest TRAIN net Sharpe (base
+  costs) among the trial grid is selected. Validation and final test are never used
+  to select.
+
+  '
+market_id: futures
+primary_benchmark: ES=F
+trading_days: 252
+source_ideas:
+- idea_id: RQ-sebamq
+  url: https://www.reddit.com/r/algotrading/comments/sebamq/is_quantitative_analysis_just_statistically/
+  published: '2022-01-27'
+  author_params_as_extracted:
+    ma_lengths:
+    - 10
+- idea_id: RQ-1suq39o
+  url: https://www.reddit.com/r/algotrading/comments/1suq39o/help_a_noob_analyze_his_algorithm_rsi2_mean/
+  published: '2026-04-24'
+  author_params_as_extracted:
+    rsi_period: 2
+    rsi_entry: 75
+- idea_id: RQ-ta0y3j
+  url: https://www.reddit.com/r/algotrading/comments/ta0y3j/elaboration_on_10k_to_100k_in_2_years_and_plans/
+  published: '2022-03-09'
+  author_params_as_extracted: {}
+- idea_id: RQ-1xe6pvu
+  url: https://www.reddit.com/r/algotrading/comments/1xe6pvu/day_1_of_aialgo_trading_paper_posting_for/
+  published: '2026-10-24'
+  author_params_as_extracted: {}
+- idea_id: RQ-1wtmd7s
+  url: https://www.reddit.com/r/Daytrading/comments/1wtmd7s/my_trading_is_intuitive_and_not_technical_at_all/
+  published: '2026-09-29'
+  author_params_as_extracted: {}
+- idea_id: RQ-bdvbjm
+  url: https://www.reddit.com/r/algotrading/comments/bdvbjm/my_algorithmic_strategy_looking_for_constructive/
+  published: '2019-04-16'
+  author_params_as_extracted: {}
+- idea_id: RQ-1e6d5h7
+  url: https://www.reddit.com/r/algotrading/comments/1e6d5h7/a_meanreversion_strategy_for_us_crude_oil_wti/
+  published: '2024-07-18'
+  author_params_as_extracted: {}
+- idea_id: RQ-1ewqzsr
+  url: https://www.reddit.com/r/Daytrading/comments/1ewqzsr/how_did_you_create_your_strategy_and_what_was_it/
+  published: '2024-08-20'
+  author_params_as_extracted: {}
+- idea_id: RQ-oaeadc
+  url: https://www.reddit.com/r/Daytrading/comments/oaeadc/what_if_rsi_is_oversold_and_price_keeps_dropping/
+  published: '2021-06-29'
+  author_params_as_extracted:
+    rsi_entry: 30
+- idea_id: RQ-wybgk5
+  url: https://www.reddit.com/r/Daytrading/comments/wybgk5/losing_streaks/
+  published: '2022-08-26'
+  author_params_as_extracted:
+    rsi_period: 30
+config_version: 2
+gates_hash: dc47726303822fba758cf2d02327db214dbae265046690370523d0ec37527ed2
+data_manifest_hash: e70e84048d143b2e24710aa8f7748f63916e1f106ba9ccb36f295700018f8517
+labels: retrospective, PROVISIONAL config
+spec_hash: c3bcefadaed5d3a893c59ff775be21001b6384d58e2b7e9a9b76eb958dffc46a

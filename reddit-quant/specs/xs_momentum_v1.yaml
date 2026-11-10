@@ -1,0 +1,129 @@
+kind: family
+family_id: xs_momentum
+version: v1
+template: xs_momentum
+rules: Every 21 bars rank the universe by lookback-bar return; hold the top_n names
+  with positive return. Exit names that drop out at a rebalance or on a close below
+  entry - 3 ATR(14). Next-open fills.
+grid:
+  lookback:
+  - 21
+  - 63
+  - 126
+  - 189
+  - 252
+  top_n:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+fixed_params:
+  rebalance_bars: 21
+  stop_atr: 3.0
+textbook_default_baseline:
+  lookback: 126
+  top_n: 3
+n_configs: 25
+universe:
+- SPY
+- QQQ
+- IWM
+- DIA
+- XLK
+- XLF
+- XLE
+- XLV
+- XLY
+- XLP
+- XLI
+- XLU
+- XLB
+timeframe: 1d
+risk_limits:
+  max_drawdown: 0.25
+  max_gross_leverage: 1.0
+  max_risk_per_position: 0.02
+  max_position_concentration: 0.25
+  max_concurrent_positions: 5
+  shorts: disabled
+  derivatives: disabled
+costs:
+  commission_perc: 0.0001
+  slippage_perc: 0.0005
+  stress_multipliers:
+  - 2
+  - 3
+execution:
+  fill: next_bar_open
+  cheat_on_open: false
+splits:
+  train:
+  - '2005-01-01'
+  - '2016-12-31'
+  validation:
+  - '2017-01-01'
+  - '2020-12-31'
+  final_test:
+  - '2021-01-01'
+  - '2026-11-09'
+selection_rule: 'Within a family, the config with the highest TRAIN net Sharpe (base
+  costs) among the trial grid is selected. Validation and final test are never used
+  to select.
+
+  '
+source_ideas:
+- idea_id: RQ-1v0ov4w
+  url: https://www.reddit.com/r/algotrading/comments/1v0ov4w/turbo_ldm_2x_leveraged_dual_momentum_w_fast/
+  published: '2026-07-19'
+  author_params_as_extracted:
+    lookbacks:
+    - 3 month
+- idea_id: RQ-1tiup27
+  url: https://www.reddit.com/r/algotrading/comments/1tiup27/a_momentum_strategy_using_leverage_and_monthly/
+  published: '2026-05-20'
+  author_params_as_extracted:
+    top_n: 5
+- idea_id: RQ-1h3pptt
+  url: https://www.reddit.com/r/algotrading/comments/1h3pptt/seeking_feedback_on_rebalancing_strategy_using/
+  published: '2024-11-30'
+  author_params_as_extracted:
+    lookbacks:
+    - 21 day
+    top_n: 5
+- idea_id: RQ-1vcn0tv
+  url: https://www.reddit.com/r/algotrading/comments/1vcn0tv/update_3factor_leveraged_model_momentum_breadth/
+  published: '2026-08-01'
+  author_params_as_extracted: {}
+- idea_id: RQ-1x46igq
+  url: https://www.reddit.com/r/algotrading/comments/1x46igq/followup_tested_the_stuff_from_your_comments_on/
+  published: '2026-10-12'
+  author_params_as_extracted: {}
+- idea_id: RQ-1hggke0
+  url: https://www.reddit.com/r/Daytrading/comments/1hggke0/why_youre_losing_money_on_breakouts/
+  published: '2024-12-17'
+  author_params_as_extracted: {}
+- idea_id: RQ-xoaz2g
+  url: https://www.reddit.com/r/algotrading/comments/xoaz2g/backest_code_etf_universe_momentum_strategy/
+  published: '2022-09-26'
+  author_params_as_extracted: {}
+- idea_id: RQ-1tu34p8
+  url: https://www.reddit.com/r/algotrading/comments/1tu34p8/built_a_premarket_momentum_scanner_in_72_hours/
+  published: '2026-06-01'
+  author_params_as_extracted: {}
+- idea_id: RQ-1r7c2p3
+  url: https://www.reddit.com/r/algotrading/comments/1r7c2p3/kept_getting_chopped_up_in_us500_then_i_checked/
+  published: '2026-02-17'
+  author_params_as_extracted: {}
+- idea_id: RQ-1x4ybpc
+  url: https://www.reddit.com/r/algotrading/comments/1x4ybpc/the_settings_that_won_before_2019_were_no_better/
+  published: '2026-10-13'
+  author_params_as_extracted:
+    lookbacks:
+    - 12 month
+    top_n: 5
+config_version: 1
+gates_hash: 87ca96846eb4dc4ce96b46a9de701b9c8af01b151293307201d62067942eda1c
+data_manifest_hash: ff457a7962536907ed11ef41d2b2fe4361c29a2bb0b67a780d87169c58bc6528
+labels: retrospective, PROVISIONAL config
+spec_hash: 71348ba23825b2670d921ac0c181250456fa2862591e895ee42cd035b7c7d5cb
