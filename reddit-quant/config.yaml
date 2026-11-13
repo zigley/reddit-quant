@@ -1,5 +1,5 @@
 # reddit-quant v1 configuration
-# EVERY VALUE BELOW IS PROVISIONAL pending confirmation from Zach.
+# EVERY VALUE BELOW IS PROVISIONAL pending confirmation from the operator.
 # Nothing tested under this config counts as validated.
 # Gates and splits in this file are PRE-REGISTERED: they are committed to git
 # before any trial runs. Changing them after results are seen is not allowed;
