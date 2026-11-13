@@ -6,7 +6,10 @@ returned data is stored on every row as access_method:
   1. praw           needs REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET in the environment (read-only OAuth)
   2. public_json    old.reddit.com public .json endpoints with a proper User-Agent
   3. arctic_shift   third-party public archive of Reddit posts/comments (arctic-shift.photon-reddit.com).
-                    Used only when reddit.com refuses the machine. Disclosed in every report.
+                    Off by default (reddit.arctic_shift_enabled). ToS-gray. Used only when enabled
+                    and earlier methods fail. Disclosed in every report.
+
+Ticker mention sentiment is a separate source: rq/apewisdom.py (primary, see config apewisdom).
 
 Rules:
   * rate limit about 1 request per 2 seconds, exponential backoff on 429/5xx
@@ -224,6 +227,10 @@ def run_scrape(cfg, con, cycle, out_dir=None):
                 for sub in rc["subreddits"]:
                     posts += fetch_public_json(cfg, sess, sub, rc["keywords"])
             elif method == "arctic_shift":
+                if not rc.get("arctic_shift_enabled", False):
+                    ledger.log_access(con, cycle, "arctic_shift", "-", "skipped",
+                                      "arctic_shift_enabled is false (ToS-gray, off by default)")
+                    continue
                 for sub in rc["subreddits"]:
                     posts += fetch_arctic(cfg, sess, sub, rc["keywords"])
             method_used = method

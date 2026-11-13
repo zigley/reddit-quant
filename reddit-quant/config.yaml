@@ -1,5 +1,5 @@
 # reddit-quant v1 configuration
-# EVERY VALUE BELOW IS PROVISIONAL pending confirmation from the operator.
+# EVERY VALUE BELOW IS PROVISIONAL pending confirmation from Zach.
 # Nothing tested under this config counts as validated.
 # Gates and splits in this file are PRE-REGISTERED: they are committed to git
 # before any trial runs. Changing them after results are seen is not allowed;
@@ -124,13 +124,35 @@ reddit:
   subreddits: [algotrading, Daytrading]
   user_agent: "reddit-quant-research/0.1 (read-only research script)"
   rate_limit_seconds: 2.0
-  method_order: [praw, public_json, arctic_shift]
+  # Idea-scrape access order. Official PRAW is used if REDDIT_CLIENT_ID/SECRET are set.
+  # Arctic Shift is ToS-gray and off by default (see arctic_shift_enabled).
+  method_order: [praw, public_json]
+  arctic_shift_enabled: false
   min_score: 3
   min_selftext_chars: 300
   max_posts_for_comments: 60
   keywords: [RSI, "mean reversion", "moving average", breakout, momentum, "Bollinger", IBS, "backtest", "sector rotation", "trend following"]
   year_from: 2019
   year_to: 2026
+  sentiment:
+    primary: apewisdom   # ticker mention counts, not raw posts (see apewisdom block)
+
+# Primary Reddit sentiment source. Free, no API key. Docs: https://apewisdom.io/api
+# Refreshes about every 30 minutes. Research only. Suggested cadence: every 30-60 minutes
+# during market hours. No scheduler is installed.
+apewisdom:
+  enabled: true
+  base_url: "https://apewisdom.io/api/v1.0"
+  filters:
+    - all-stocks
+    - wallstreetbets
+    - stocks
+    - pennystocks          # tracked per https://apewisdom.io/methodology, not listed on the short API filter list
+  rate_limit_seconds: 2.0  # floor is 2.0 in code
+  timeout_seconds: 30
+  max_pages: null          # fetch every page (100 rows each)
+  user_agent: "reddit-quant-research/0.1 (ApeWisdom sentiment pull; +https://github.com/zigley/reddit-quant)"
+  cache_dir: data/cache
 
 # ---------------------------------------------------------------------------
 # Cycle 2 markets. Each market is its own research universe: its own trial
