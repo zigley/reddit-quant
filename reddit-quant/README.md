@@ -3,31 +3,17 @@
 Reddit-driven research framework for daily-bar strategies. Research and paper trading only.
 Cycle 1 tested US equity ETFs. Cycle 2 adds three more universes (crypto, commodity/bond/international ETFs, and continuous futures), each with its own splits, costs, trial counter and primary benchmark.
 Live trading is disabled in code (`live_trading: false` in `config.yaml`; the loader exits otherwise) and no
-module can place an order. Every value in `config.yaml` is PROVISIONAL until the operator confirms it.
+module can place an order. Every value in `config.yaml` is PROVISIONAL until Zach confirms it.
 
 Nothing here claims ongoing monitoring. No scheduler is installed. The cron line below is documentation only.
-
-## Scope and disclaimer
-
-This is a research and paper-trading framework only. Live trading is disabled
-in code (`live_trading: false` in `config.yaml`; the loader exits if that flag
-is true) and no module can place an order. Nothing in this repository is
-financial advice.
-
-The scraper reads Reddit content in a read-only way. Official access is through
-Reddit's API (PRAW, with `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` taken
-only from environment variables). Public JSON and a third-party archive are
-fallbacks when the API is unavailable. This public tree does not include Reddit
-posts, comments, or other Reddit data, and the project does not redistribute
-Reddit content. Price CSVs and the SQLite ledger are also local-only; download
-prices yourself and let a cycle create the ledger.
 
 ## Layout
 
 ```
 config.yaml            provisional config plus pre-registered gates (committed before any trial)
 run_cycle.py           one full cycle: data check, scrape, parse, rank, freeze, trials, gates, final test, report
-rq/reddit_scraper.py   PRAW -> public JSON -> Arctic Shift archive; drops author fields; rate limited
+rq/reddit_scraper.py   idea scrape: PRAW -> public JSON (Arctic Shift off by default, ToS-gray)
+rq/apewisdom.py        primary Reddit ticker-sentiment source (ApeWisdom, free, no key)
 rq/rule_parser.py      regex rule extraction, dedupe into families, testability ranking
 rq/ledger.py           SQLite ledger (append-only for trials, evaluations, gates, status, specs, final-test log)
 rq/specs.py            versioned YAML specs with sha256, written read-only, verified before every run
@@ -38,12 +24,11 @@ rq/research.py         trials, robustness evaluation, dev and final gates, once-
 rq/champion.py         champion, challenger, rejected status; no path to live
 rq/scorecard.py        scorecard CSV and markdown, section 13 cycle report
 rq/broker_alpaca.py    disabled Alpaca paper stub (no keys requested, no network calls)
-tests/                 engine, ledger lock, and multi-market tests
-data/                  price manifests only in this public tree (data/manifest.json and data/manifests/). Download CSVs locally. Reddit JSONL is never committed
+tests/                 engine, ledger lock, multi-market, and ApeWisdom tests
+data/                  prices (CSV), cycle-1 manifest.json, per-market manifests under data/manifests/, raw Reddit JSONL, ApeWisdom cache under data/cache/
 specs/                 frozen specs
-artifacts/             created at runtime (gitignored)
-ledger/                created at runtime, SQLite gitignored
-reports/               cycle reports and scorecards (Reddit post titles and permalink slugs redacted in this public copy)
+artifacts/             per-cycle trial equity curves, trade logs, evaluation JSON
+reports/               cycle reports and scorecards
 ```
 
 ## Set up the backtest engine
@@ -91,19 +76,40 @@ python run_cycle.py --cycle 2 --skip-scrape --markets crypto,cbi,futures
 
 Cycle numbers must not repeat: a frozen spec can reach the locked final test once, and the ledger enforces it.
 
-Example cron (not installed; the operator handles scheduling):
+Example cron (not installed; Zach handles scheduling):
 
 ```
-0 6 * * 0 cd /path/to/reddit-quant && .venv/bin/python run_cycle.py --cycle $(date +\%G\%V) >> logs/cron.log 2>&1
+0 6 * * 0 cd /workspace/reddit-quant && .venv/bin/python run_cycle.py --cycle $(date +\%G\%V) >> logs/cron.log 2>&1
 ```
 
-## Reddit access and credentials
+## Reddit sentiment (ApeWisdom)
 
-`reddit_scraper.py` tries, in order:
+Ticker mention sentiment comes from ApeWisdom (`https://apewisdom.io/api`), which is free and needs no API key.
+It is the primary Reddit sentiment source in `config.yaml`. Official Reddit (PRAW) stays optional for the
+separate idea-scrape path if keys ever arrive. Arctic Shift stays off by default because of a ToS-gray area.
+
+Pull current mention ranks (writes raw JSON and a normalized CSV under `data/cache/`):
+
+```bash
+source .venv/bin/activate
+python -m rq.apewisdom
+python tests/test_apewisdom.py
+```
+
+ApeWisdom refreshes about every 30 minutes. A pull every 30-60 minutes during market hours is enough.
+No scheduler is installed. Zach handles scheduling if he wants one.
+
+Filters used: `all-stocks`, `wallstreetbets`, `stocks`, `pennystocks`. Requests are at most one every 2 seconds,
+with retries, backoff, a 30-second timeout, and a clear User-Agent. `pennystocks` is tracked on the methodology
+page but is not on the short official filter list, so a missing filter is skipped and reported rather than failing the pull.
+
+## Reddit idea scrape and credentials
+
+`reddit_scraper.py` is the idea-scrape path (raw posts and comments for rule extraction). It tries, in order:
 
 1. PRAW, if `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` are set.
 2. Public JSON on old.reddit.com with a proper User-Agent, about 1 request per 2 seconds, exponential backoff.
-3. Arctic Shift, a third-party public archive of Reddit posts and comments, used only if reddit.com refuses the machine.
+3. Arctic Shift, only if `reddit.arctic_shift_enabled` is true (off by default, ToS-gray).
 
 To add Reddit API credentials: create a "script" app at https://www.reddit.com/prefs/apps, then
 
@@ -119,7 +125,7 @@ Author fields are dropped at ingest.
 
 ## Overfitting safety checks
 
-- Pre-registered gates in `config.yaml`, recorded in that file before trial 1.
+- Pre-registered gates in `config.yaml`, committed before trial 1 (see git history).
 - Trial counter per family (`ledger.trial_count`), budget of 25 configs per family, trials append-only.
 - Selection uses train Sharpe only. Validation and final test never select.
 - Deflated Sharpe Ratio with N = 25 (and a pooled N = 75 conservative figure), PBO via CSCV (16 partitions),
@@ -135,7 +141,3 @@ Author fields are dropped at ingest.
   blended portfolio. No intraday, options or short selling. Crypto, commodity/bond/international ETFs and continuous
   futures are tested as separate universes from cycle 2; futures rolls are not modelled, and yfinance continuous
   contracts can contain artifacts (see the cycle 2 report).
-
-## License
-
-MIT. See `LICENSE`.
